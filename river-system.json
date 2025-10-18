@@ -1,0 +1,38 @@
+{
+  "spec_name": "river-system",
+  "context": "Generates realistic river networks that carve through the terrain and remain consistent across levels of detail.",
+  "description": "Calculates flow accumulation from rainfall and topography to determine river paths and modifies the heightfield to carve riverbeds.",
+  "classes": [
+    {
+      "name": "RiverSystem",
+      "description": "Helper used by UWorldGenerator to create rivers.",
+      "methods": [
+        {
+          "name": "ComputeFlowDirection(heightField)",
+          "description": "Compute for each cell the index of its steepest downhill neighbor.",
+          "pseudocode": "For each cell: inspect neighbors; pick the neighbor with the lowest elevation; store direction."
+        },
+        {
+          "name": "FlowAccumulation(directionMap)",
+          "description": "Accumulate flow by counting the number of upstream cells draining through each cell.",
+          "pseudocode": "Initialize accumulation to 1; traverse cells in topological order; add accumulation of upstream neighbors."
+        },
+        {
+          "name": "ExtractRivers(accumulationMap, threshold)",
+          "description": "Identify cells that form river channels based on accumulated flow.",
+          "pseudocode": "Mark cells where accumulation > threshold as river; connect them into polylines; merge into a graph."
+        },
+        {
+          "name": "CarveRiver(heightField, riverGraph)",
+          "description": "Lower the terrain along river paths to form channels with width and depth proportional to flow.",
+          "pseudocode": "For each river spline: for each point along the spline: lower heightField by depth f(flow) within width f(flow)."
+        }
+      ],
+      "relationships": {
+        "used_by": "UWorldGenerator",
+        "modifies": "MapTile.heightField"
+      }
+    }
+  ],
+  "pseudocode": "Compute flow directions and accumulation, threshold to define rivers, then carve the terrain."
+}
