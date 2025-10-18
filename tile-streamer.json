@@ -1,0 +1,42 @@
+{
+  "spec_name": "tile-streamer",
+  "context": "Manages loading and unloading of MapTile objects based on camera position and zoom level.",
+  "description": "Maintains a set of currently loaded tiles and ensures the right data is generated and kept in memory for smooth gameplay.",
+  "classes": [
+    {
+      "name": "ATileStreamer",
+      "description": "Actor responsible for streaming map tiles in and out of the world.",
+      "methods": [
+        {
+          "name": "Tick(dt)",
+          "description": "Update streaming each frame.",
+          "pseudocode": "wanted = ComputeWantedTilesFromCamera(); StreamInOut(wanted);"
+        },
+        {
+          "name": "ComputeWantedTilesFromCamera()",
+          "description": "Determine which tiles should be loaded based on camera location, frustum and zoom.",
+          "pseudocode": "Use a quadtree to find tile keys intersecting the camera frustum at the current LOD."
+        },
+        {
+          "name": "StreamInOut(wantedSet)",
+          "description": "Load missing tiles and unload tiles no longer needed.",
+          "pseudocode": "For each key in wantedSet not in loaded: call UWorldGenerator.GenTile(key) and add to loaded; for each loaded tile not in wantedSet: remove and free resources."
+        }
+      ],
+      "relationships": {
+        "uses": [
+          "UWorldGenerator",
+          "CameraController"
+        ],
+        "manages": [
+          "MapTile"
+        ]
+      }
+    }
+  ],
+  "pseudocode": [
+    "Each frame, determine the set of tiles intersecting the camera view.",
+    "Generate and load any missing tiles asynchronously.",
+    "Unload tiles that are outside of the view to save memory."
+  ]
+}
