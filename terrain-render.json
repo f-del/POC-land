@@ -1,0 +1,38 @@
+{
+  "spec_name": "terrain-render",
+  "context": "Converts MapTile height and biome data into renderable terrain meshes with appropriate material and LOD settings.",
+  "description": "Builds landscape or Nanite meshes for each loaded tile and applies Runtime Virtual Texturing (RVT) for texture blending; ensures continuity across tiles and zoom levels.",
+  "classes": [
+    {
+      "name": "TerrainRenderer",
+      "description": "Component that generates render assets for MapTiles.",
+      "methods": [
+        {
+          "name": "BuildMesh(tile)",
+          "description": "Create a mesh or landscape section from the tile's height field.",
+          "pseudocode": "Sample tile.heightField into a vertex grid; create mesh; apply normal mapping; adjust resolution based on tile.lodLevel."
+        },
+        {
+          "name": "ApplyMaterials(tile)",
+          "description": "Assign materials based on biome and slope using RVT or tri‑planar techniques.",
+          "pseudocode": "For each vertex: compute biome index; choose material layers (grass, rock, sand); blend using slope and altitude; write to RVT."
+        },
+        {
+          "name": "UpdateLOD(tile)",
+          "description": "Update the mesh's LOD or HLOD representation when the camera zoom changes.",
+          "pseudocode": "Switch between full mesh, simplified mesh or impostor depending on distance and tile.lodLevel."
+        }
+      ],
+      "relationships": {
+        "consumes": [
+          "MapTile"
+        ],
+        "interacts_with": [
+          "WorldPartition",
+          "RVT"
+        ]
+      }
+    }
+  ],
+  "pseudocode": "For each loaded tile: build a mesh at an appropriate resolution; assign materials and update LOD when needed."
+}
