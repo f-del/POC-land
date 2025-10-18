@@ -1,0 +1,36 @@
+{
+  "spec_name": "vegetation-system",
+  "context": "Places vegetation instances such as trees and shrubs based on biome and terrain properties.",
+  "description": "Uses density maps and Poisson disk sampling to determine positions of vegetation instances and spawns them via the PCG framework.",
+  "classes": [
+    {
+      "name": "VegetationSystem",
+      "description": "Responsible for vegetation placement on a tile.",
+      "methods": [
+        {
+          "name": "ComputeDensityMap(biomeMap, slopeMap)",
+          "description": "Determine vegetation density per cell based on biome type and slope.",
+          "pseudocode": "For each cell: base density from biome lookup; reduce density if slope > threshold or altitude too high; store density."
+        },
+        {
+          "name": "SamplePositions(densityMap, minDistance)",
+          "description": "Generate sample points using Poisson disk sampling within the tile bounds.",
+          "pseudocode": "Initialize empty list; while not enough points: pick random candidate; reject if too close to existing points; accept with probability proportional to density."
+        },
+        {
+          "name": "SpawnInstances(tile, positions)",
+          "description": "Spawn instanced static meshes via Unreal's PCG framework for each sampled position.",
+          "pseudocode": "For each position: choose tree type based on biome; call PCG to spawn instance at position with random rotation and scale."
+        }
+      ],
+      "relationships": {
+        "used_by": "UWorldGenerator",
+        "consumes": [
+          "MapTile.biome",
+          "MapTile.heightField"
+        ]
+      }
+    }
+  ],
+  "pseudocode": "Compute density, sample positions with Poisson disk, then spawn vegetation instances."
+}
