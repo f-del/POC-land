@@ -1,0 +1,39 @@
+{
+  "spec_name": "streaming-lod",
+  "context": "Defines how tiles and objects are rendered and simplified at different zoom levels.",
+  "description": "Integrates Unreal World Partition and Hierarchical LOD (HLOD) to ensure smooth transitions when zooming between local, regional and national views.",
+  "classes": [
+    {
+      "name": "LODManager",
+      "description": "Determines which representation (full detail, simplified, impostor) to use for terrain, vegetation and buildings.",
+      "methods": [
+        {
+          "name": "SelectTerrainLOD(distance)",
+          "description": "Select appropriate terrain mesh resolution based on camera distance.",
+          "pseudocode": "If distance > farThreshold: use HLOD or impostor; else if distance > midThreshold: use simplified mesh; else: use full resolution."
+        },
+        {
+          "name": "SelectVegetationLOD(distance)",
+          "description": "Select vegetation representation (instances vs. impostor).",
+          "pseudocode": "If distance is far: draw as billboard or blob; else: draw instanced meshes."
+        },
+        {
+          "name": "SelectBuildingLOD(distance)",
+          "description": "Select building mesh LOD using the HLOD system.",
+          "pseudocode": "Use Unreal HLOD clusters: high LOD near the camera; coarse mesh far away."
+        }
+      ],
+      "relationships": {
+        "works_with": [
+          "TerrainRenderer",
+          "VegetationSystem"
+        ],
+        "uses": [
+          "WorldPartition",
+          "HLOD"
+        ]
+      }
+    }
+  ],
+  "pseudocode": "For each object type, choose an LOD representation based on camera distance and zoom level."
+}
