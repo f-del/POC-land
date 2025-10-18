@@ -1,0 +1,52 @@
+{
+  "spec_name": "world-generator",
+  "context": "Generate the procedural world for a strategy game with multi‑level zoom (local, regional, national). Use a deterministic seed to create a consistent world across all levels of detail.",
+  "description": "Provides high‑level algorithms to produce height fields, biomes, rivers and vegetation density maps at macro (national) resolution, then refines them into regional and local tiles as needed.",
+  "classes": [
+    {
+      "name": "UWorldGenerator",
+      "description": "Core generator that takes a seed and outputs deterministic world data at different levels of detail.",
+      "methods": [
+        {
+          "name": "Init(seed)",
+          "description": "Initializes internal noise generators and state using a global seed.",
+          "pseudocode": "Set this.seed = seed; initialize noise and random generators with seed."
+        },
+        {
+          "name": "GenHeightMacro()",
+          "description": "Generate a low‑resolution height map for the entire world.",
+          "pseudocode": "Use multi‑octave noise (e.g., OpenSimplex) to produce a 2D array of elevations; optionally apply tectonic masks."
+        },
+        {
+          "name": "GenBiomes(heightField)",
+          "description": "Compute biome map based on temperature and humidity derived from height and latitude.",
+          "pseudocode": "For each cell: compute temperature = f(latitude, height); compute humidity = f(distance_to_ocean, prevailing_wind); look up biome from (temperature, humidity)."
+        },
+        {
+          "name": "GenRivers(heightField, rainMap)",
+          "description": "Calculate flow accumulation and derive river graph.",
+          "pseudocode": "Compute flow direction for each cell pointing to the steepest neighbor; accumulate flow from upstream; mark cells with flow greater than a threshold as river; connect into a river graph."
+        },
+        {
+          "name": "GenTile(tileKey)",
+          "description": "Generate a specific regional or local tile by refining macro data.",
+          "pseudocode": "Sample the macro height map for the tile bounds; add higher‑frequency noise; optionally apply light erosion; compute local rivers and vegetation density; return TileData."
+        }
+      ],
+      "relationships": {
+        "uses": [
+          "RiverSystem",
+          "VegetationSystem"
+        ],
+        "produces": [
+          "MapTile"
+        ]
+      }
+    }
+  ],
+  "pseudocode": [
+    "Init global seed and noise functions.",
+    "Generate macro height map and biome data once at startup.",
+    "For each camera zoom level request, generate or load regional/local tiles using GenTile."
+  ]
+}
