@@ -1,0 +1,67 @@
+{
+  "spec_name": "map-tile",
+  "context": "Data container for a portion of the world at a specific level of detail.",
+  "description": "Stores terrain, climate, river and vegetation information for a tile; used by streaming and rendering systems.",
+  "structs": [
+    {
+      "name": "MapTile",
+      "description": "Represents a region of the world in the quadtree.",
+      "fields": [
+        {
+          "name": "seedLocal",
+          "type": "int",
+          "description": "Local seed derived from the global seed and tile coordinates."
+        },
+        {
+          "name": "bbox",
+          "type": "BoundingBox2D",
+          "description": "World‑space extents of the tile."
+        },
+        {
+          "name": "lodLevel",
+          "type": "int",
+          "description": "Level of detail index (0 = macro, 1 = regional, 2 = local)."
+        },
+        {
+          "name": "heightField",
+          "type": "array<float>",
+          "description": "Height values sampled or generated for this tile."
+        },
+        {
+          "name": "moisture",
+          "type": "array<float>",
+          "description": "Moisture values for biome calculation."
+        },
+        {
+          "name": "temperature",
+          "type": "array<float>",
+          "description": "Temperature values for biome calculation."
+        },
+        {
+          "name": "biome",
+          "type": "array<int>",
+          "description": "Biome indices per cell."
+        },
+        {
+          "name": "rivers",
+          "type": "RiverGraph",
+          "description": "River splines or graph segments intersecting the tile."
+        },
+        {
+          "name": "vegetation",
+          "type": "array<Instance>",
+          "description": "Vegetation instances or density map for the tile."
+        }
+      ],
+      "relationships": {
+        "produced_by": "UWorldGenerator",
+        "consumed_by": [
+          "ATileStreamer",
+          "TerrainRenderer",
+          "VegetationSystem"
+        ]
+      }
+    }
+  ],
+  "pseudocode": "Tile is created by sampling macro data and generating fine details; acts as a unit of streaming."
+}
