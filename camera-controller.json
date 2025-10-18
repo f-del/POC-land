@@ -1,0 +1,28 @@
+{
+  "spec_name": "camera-controller",
+  "context": "Manages camera height and transitions between local, regional and national views.",
+  "description": "Adjusts field of view, altitude and movement speed based on zoom level and notifies the tile streamer to update loaded tiles.",
+  "classes": [
+    {
+      "name": "CameraController",
+      "description": "Handles zoom logic and user input for camera control.",
+      "methods": [
+        {
+          "name": "SetZoomLevel(level)",
+          "description": "Change current zoom level to local (0), regional (1) or national (2).",
+          "pseudocode": "currentLevel = level; adjust camera height and FOV accordingly; notify tile streamer."
+        },
+        {
+          "name": "Update(input)",
+          "description": "Process user input each frame and update camera position and zoom.",
+          "pseudocode": "Read scroll wheel or key input; if zoom changed: call SetZoomLevel(); update position with pan controls."
+        }
+      ],
+      "relationships": {
+        "notifies": "ATileStreamer",
+        "controlled_by": "PlayerInput"
+      }
+    }
+  ],
+  "pseudocode": "Listen to input; adjust camera height and FOV; instruct tile streamer to reload tiles when zoom changes."
+}
